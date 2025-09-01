@@ -1,0 +1,37 @@
+name: Build Go code (static)
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.24'
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          pkg-config \
+          libgtk-4-dev \
+          libxkbcommon-dev \
+          gobject-introspection \
+          libgirepository1.0-dev
+
+    - name: Build
+      run: CGO_ENABLED=1 CC=musl-gcc go build -v -x -ldflags="-linkmode external -extldflags '-static'" ./...
+
+    - uses: actions/upload-artifact@v4
+      with:
+        name: live-calculator
+        path: live-calculator

@@ -26,7 +26,8 @@ jobs:
           libgtk-4-dev \
           libxkbcommon-dev \
           gobject-introspection \
-          libgirepository1.0-dev
+          libgirepository1.0-dev \
+          musl
 
     - name: Build
       run: CGO_ENABLED=1 CC=musl-gcc go build -v -x -ldflags="-linkmode external -extldflags '-static'" ./...

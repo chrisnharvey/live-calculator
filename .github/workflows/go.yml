@@ -24,5 +24,10 @@ jobs:
     - name: Build
       run: go build -v -x ./...
 
+    - uses: actions/upload-artifact@v4
+      with:
+        name: live-calculator
+        path: live-calculator
+
     - name: Test
       run: go test -v ./...
